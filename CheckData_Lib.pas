@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs,inifiles,
-  ExtCtrls,DB, ADODB,DBAccess,ShellAPI;
+  ExtCtrls,DB, ADODB,{DBAccess,}ShellAPI;
 
 function CheckDataIsRight(Data:string):boolean;
 function GetNodeTime(DBTime,msg:string):TDateTime;
@@ -29,6 +29,7 @@ begin
    52:  result:='客服求援需求';
    53:  result:='主機系統回報';
    54:  result:='壓扣電量不足';
+   55:  result:='RFID上傳資訊';
    end;
 end;
 
@@ -101,8 +102,8 @@ begin
   result:=false;
   if (Pos('*',Data)<>1) then exit;
   if (Pos('#',Data)<>15) then exit;
-  if strtoint(copy(Data,16,2))>8 then exit;  //壓扣編號
-  if (strtoint(copy(Data,18,2)) in [1,2,3,50,51,52,53,54])=false then exit;     //訊息代碼
+  if strtoint(copy(Data,16,2))>9 then exit;  //壓扣編號
+  if (strtoint(copy(Data,18,2)) in [1,2,3,50,51,52,53,54,55])=false then exit;     //訊息代碼
   CheckSUM:=0;
   for i:=1 to 25 do
   begin
@@ -180,6 +181,10 @@ begin
           DataQuery.FieldByName('MSG_Buttonsite').AsInteger:=GetButtonSite(MSGList.Strings[i]);
           DataQuery.FieldByName('MSG_MSGType').AsInteger:=GetMSGType(MSGList.Strings[i]);
           DataQuery.FieldByName('MSG_MSGText').AsString:=GetMSGText(MSGList.Strings[i]);
+          if GetMSGText(MSGList.Strings[i])='RFID上傳資訊' then
+          begin
+             DataQuery.FieldByName('MSG_RFID_Data').AsString:=GetMeasureData(MSGList.Strings[i]);
+          end;
           DataQuery.FieldByName('MSG_GWTime').AsDateTime:=GetNodeTime(TimeSTR,MSGList.Strings[i]);
           if DataNoDup=true then
           begin

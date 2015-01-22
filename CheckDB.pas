@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs,inifiles,
-  ExtCtrls,DB, ADODB,DBAccess,ShellAPI;
+  ExtCtrls,DB, ADODB,{DBAccess,}ShellAPI;
 
 type
   TCheckDB = class(TThread)

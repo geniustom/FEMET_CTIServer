@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs,inifiles,ConsoleCommand,CTI_DataType,
-  ExtCtrls,DB, ADODB,DBAccess;
+  ExtCtrls,DB, ADODB{,DBAccess};
 
 type
 

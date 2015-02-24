@@ -152,6 +152,7 @@ var
    DataPath:string;
    ConnectIsOK,PostOK:integer;
    DataNoDup:boolean; //資料是否重複
+   RFIDHexCode:string;
 begin
    DataPath:=ExtractFilePath(Application.ExeName);
    MSGList:= TStringList.Create;
@@ -183,7 +184,9 @@ begin
           DataQuery.FieldByName('MSG_MSGText').AsString:=GetMSGText(MSGList.Strings[i]);
           if GetMSGText(MSGList.Strings[i])='RFID上傳資訊' then
           begin
-             DataQuery.FieldByName('MSG_RFID_Data').AsString:=GetMeasureData(MSGList.Strings[i]);
+             RFIDHexCode:=GetMeasureData(MSGList.Strings[i]);
+             RFIDHexCode:=inttohex(strtoint(trim(RFIDHexCode)),6);
+             DataQuery.FieldByName('MSG_RFID_Data').AsString:=RFIDHexCode;
           end;
           DataQuery.FieldByName('MSG_GWTime').AsDateTime:=GetNodeTime(TimeSTR,MSGList.Strings[i]);
           if DataNoDup=true then
